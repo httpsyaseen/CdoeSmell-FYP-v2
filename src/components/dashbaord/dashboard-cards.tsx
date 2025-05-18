@@ -6,8 +6,8 @@ import { AlertTriangle, Code, FileText, AlertCircle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
-import api from "@/lib/api";
 import CodeSmellPieChart from "./custom-piechart";
+import api from "@/lib/api";
 
 interface DashboardData {
   totalSmells: number;
@@ -29,7 +29,7 @@ export function DashboardCards() {
     const fetchDashboardData = async () => {
       setLoading(true);
       try {
-        const { data } = await api.get(`/project/dashboard-stats`);
+        const { data } = await api.get(`/project/dashboard-stats `);
         console.log(data.data);
         setData(data.data);
       } catch (err) {
@@ -45,7 +45,6 @@ export function DashboardCards() {
         setLoading(false);
       }
     };
-
     fetchDashboardData();
   }, []);
 
@@ -58,14 +57,23 @@ export function DashboardCards() {
 
   const getQualityColor = (quality: string) => {
     const value = Number.parseFloat(quality);
-    if (value >= 70) return "bg-teal-500";
-    if (value >= 40) return "bg-purple-500";
-    return "bg-pink-500";
+    if (value >= 70) return "bg-[#2da44e]"; // GitHub green
+    if (value >= 40) return "bg-[#bf8700]"; // GitHub yellow
+    return "bg-[#cf222e]"; // GitHub red
+  };
+
+  const getSeverity = (value: number) => {
+    if (value === 0) return "Low";
+    if (value < 50) return "Medium";
+    if (value > 50) return "high";
   };
 
   if (error && !data) {
     return (
-      <Alert variant="destructive" className="mb-6">
+      <Alert
+        variant="destructive"
+        className="mb-6 border border-[#cf222e] bg-[#FFEBE9] text-[#cf222e]"
+      >
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>{error}</AlertDescription>
       </Alert>
@@ -76,40 +84,44 @@ export function DashboardCards() {
     <div className="space-y-8">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {/* Total Code Smells Card */}
-        <Card className="border-0 overflow-hidden bg-slate-900 text-white shadow-lg">
+        <Card className="border border-[#d0d7de] rounded-md overflow-hidden  bg-[#f6f8fa]">
           {loading ? (
-            <CardContent className="p-6">
+            <CardContent className="">
               <div className="flex justify-between items-center mb-4">
-                <Skeleton className="h-4 w-32 bg-slate-700" />
-                <Skeleton className="h-8 w-8 rounded-full bg-slate-700" />
+                <Skeleton className="h-4 w-32 bg-[#eaeef2]" />
+                <Skeleton className="h-8 w-8 rounded-full bg-[#eaeef2]" />
               </div>
-              <Skeleton className="h-8 w-20 mb-2 bg-slate-700" />
-              <Skeleton className="h-3 w-24 bg-slate-700" />
+              <Skeleton className="h-8 w-20 mb-2 bg-[#eaeef2]" />
+              <Skeleton className="h-3 w-24 bg-[#eaeef2]" />
             </CardContent>
           ) : (
-            <CardContent className="p-6 relative">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-pink-500/10 rounded-bl-full"></div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-pink-500/20 p-2 rounded-lg">
-                  <AlertTriangle className="w-5 h-5 text-pink-400" />
-                </div>
-                <h3 className="text-sm font-medium text-slate-300">
+            <CardContent className="p-4 bg-[#f6f8fa]">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-[#57606a]">
                   Code Smells
-                </h3>
-              </div>
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold">
-                  {data?.totalSmells.toLocaleString()}
                 </span>
+                <AlertTriangle className="h-4 w-4 text-[#d29922]" />
               </div>
-              <p className="text-xs text-slate-400 mt-1">
+              <div className="text-2xl font-semibold text-[#24292f]">
+                {data?.totalSmells.toLocaleString()}
+              </div>
+              <p className="text-xs text-[#57606a] mt-1">
                 Issues detected across all projects
               </p>
-              <div className="mt-4 pt-4 border-t border-slate-800">
+              <div className="mt-3 pt-3 border-t border-[#d0d7de]">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">Severity</span>
-                  <span className="text-xs font-medium text-pink-400">
-                    High
+                  <span className="text-xs text-[#57606a]">Severity</span>
+                  <span
+                    className={cn(
+                      "text-xs font-medium px-2 py-0.5 rounded-full",
+                      data?.totalSmells === 0
+                        ? "text-[#2da44e] bg-[#dafbe1]" // Green for Low
+                        : data?.totalSmells || 5 < 50
+                        ? "text-[#bf8700] bg-[#fff8c5]" // Yellow for Medium
+                        : "text-[#cf222e] bg-[#FFEBE9]" // Red for High
+                    )}
+                  >
+                    {getSeverity(data?.totalSmells || 0)}
                   </span>
                 </div>
               </div>
@@ -118,37 +130,34 @@ export function DashboardCards() {
         </Card>
 
         {/* Total Projects Card */}
-        <Card className="border-0 overflow-hidden bg-slate-900 text-white shadow-lg">
+        <Card className="border border-[#d0d7de] rounded-md overflow-hidden bg-[#f6f8fa] ">
           {loading ? (
-            <CardContent className="p-6">
+            <CardContent className="p-4">
               <div className="flex justify-between items-center mb-4">
-                <Skeleton className="h-4 w-32 bg-slate-700" />
-                <Skeleton className="h-8 w-8 rounded-full bg-slate-700" />
+                <Skeleton className="h-4 w-32 bg-[#eaeef2]" />
+                <Skeleton className="h-8 w-8 rounded-full bg-[#eaeef2]" />
               </div>
-              <Skeleton className="h-8 w-20 mb-2 bg-slate-700" />
-              <Skeleton className="h-3 w-24 bg-slate-700" />
+              <Skeleton className="h-8 w-20 mb-2 bg-[#eaeef2]" />
+              <Skeleton className="h-3 w-24 bg-[#eaeef2]" />
             </CardContent>
           ) : (
-            <CardContent className="p-6 relative">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-bl-full"></div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-purple-500/20 p-2 rounded-lg">
-                  <FileText className="w-5 h-5 text-purple-400" />
-                </div>
-                <h3 className="text-sm font-medium text-slate-300">Projects</h3>
-              </div>
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold">
-                  {data?.totalProjects}
+            <CardContent className="p-4 bg-[#f6f8fa]">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-[#57606a]">
+                  Projects
                 </span>
+                <FileText className="h-4 w-4 text-[#57606a]" />
               </div>
-              <p className="text-xs text-slate-400 mt-1">
+              <div className="text-2xl font-semibold text-[#24292f]">
+                {data?.totalProjects}
+              </div>
+              <p className="text-xs text-[#57606a] mt-1">
                 Active projects being monitored
               </p>
-              <div className="mt-4 pt-4 border-t border-slate-800">
+              <div className="mt-3 pt-3 border-t border-[#d0d7de]">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">Status</span>
-                  <span className="text-xs font-medium text-purple-400">
+                  <span className="text-xs text-[#57606a]">Status</span>
+                  <span className="text-xs font-medium text-[#0969da] bg-[#ddf4ff] px-2 py-0.5 rounded-full">
                     Active
                   </span>
                 </div>
@@ -158,40 +167,32 @@ export function DashboardCards() {
         </Card>
 
         {/* Code Quality Card */}
-        <Card className="border-0 overflow-hidden bg-slate-900 text-white shadow-lg">
+        <Card className="border border-[#d0d7de] rounded-md overflow-hidden bg-[#f6f8fa] ">
           {loading ? (
-            <CardContent className="p-6">
+            <CardContent className="p-4">
               <div className="flex justify-between items-center mb-4">
-                <Skeleton className="h-4 w-32 bg-slate-700" />
-                <Skeleton className="h-8 w-8 rounded-full bg-slate-700" />
+                <Skeleton className="h-4 w-32 bg-[#eaeef2]" />
+                <Skeleton className="h-8 w-8 rounded-full bg-[#eaeef2]" />
               </div>
-              <Skeleton className="h-8 w-20 mb-2 bg-slate-700" />
-              <Skeleton className="h-3 w-full bg-slate-700" />
-              <Skeleton className="h-3 w-16 mt-2 bg-slate-700" />
+              <Skeleton className="h-8 w-20 mb-2 bg-[#eaeef2]" />
+              <Skeleton className="h-3 w-full bg-[#eaeef2]" />
+              <Skeleton className="h-3 w-16 mt-2 bg-[#eaeef2]" />
             </CardContent>
           ) : (
-            <CardContent className="p-6 relative">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-teal-500/10 rounded-bl-full"></div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-teal-500/20 p-2 rounded-lg">
-                  <Code className="w-5 h-5 text-teal-400" />
-                </div>
-                <h3 className="text-sm font-medium text-slate-300">
+            <CardContent className="p-4 bg-[#f6f8fa]">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-[#57606a]">
                   Code Quality
-                </h3>
-              </div>
-
-              <div className="flex items-baseline gap-1 mb-3">
-                <span className="text-3xl font-bold">
-                  {Number.parseFloat(data?.codeQuality || "0").toFixed(1)}
                 </span>
-                <span className="text-slate-400 text-sm">%</span>
+                <Code className="h-4 w-4 text-[#2da44e]" />
               </div>
-
-              <div className="relative w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+              <div className="text-2xl font-semibold text-[#24292f]">
+                {Number.parseFloat(data?.codeQuality || "0").toFixed(1)}%
+              </div>
+              <div className="mt-2 bg-[#d0d7de] rounded-full h-2 overflow-hidden">
                 <div
                   className={cn(
-                    "h-full rounded-full transition-all duration-500 ease-out",
+                    "h-full transition-all duration-500 ease-out",
                     getQualityColor(data?.codeQuality || "0")
                   )}
                   style={{
@@ -200,18 +201,17 @@ export function DashboardCards() {
                   }}
                 />
               </div>
-
-              <div className="mt-4 pt-4 border-t border-slate-800">
+              <div className="mt-3 pt-3 border-t border-[#d0d7de]">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">Status</span>
+                  <span className="text-xs text-[#57606a]">Status</span>
                   <span
                     className={cn(
-                      "text-xs font-medium",
+                      "text-xs font-medium px-2 py-0.5 rounded-full",
                       Number.parseFloat(data?.codeQuality || "0") >= 70
-                        ? "text-teal-400"
+                        ? "text-[#2da44e] bg-[#dafbe1]"
                         : Number.parseFloat(data?.codeQuality || "0") >= 40
-                        ? "text-purple-400"
-                        : "text-pink-400"
+                        ? "text-[#bf8700] bg-[#fff8c5]"
+                        : "text-[#cf222e] bg-[#FFEBE9]"
                     )}
                   >
                     {getQualityLabel(data?.codeQuality || "0")}
@@ -222,8 +222,9 @@ export function DashboardCards() {
           )}
         </Card>
       </div>
+
       <div>
-        <CodeSmellPieChart chartData={data?.chartData} />
+        <CodeSmellPieChart chartData={data?.chartData ?? []} />
       </div>
     </div>
   );

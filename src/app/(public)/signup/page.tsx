@@ -206,21 +206,22 @@ export default function SignupPage() {
   }, []);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 py-8">
-      <div className="w-full max-w-md rounded-lg border bg-white p-8 shadow-sm">
+    <div className="flex min-h-screen items-center justify-center bg-[#f6f8fa] py-8">
+      <div className="w-full max-w-md rounded-md border border-[#d0d7de] bg-white p-6 shadow-sm">
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold">Create an Account</h1>
-          <p className="text-sm text-gray-500">Sign up to get started</p>
+          <h1 className="text-2xl font-semibold text-[#24292f]">
+            Create your account
+          </h1>
         </div>
 
         {successMessage && (
-          <div className="mb-4 rounded-md bg-green-50 p-3 text-sm text-green-700">
+          <div className="mb-4 rounded-md bg-[#dafbe1] p-3 text-sm text-[#1a7f37] border border-[#2da44e] border-opacity-30">
             {successMessage}
           </div>
         )}
 
         {error && (
-          <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
+          <div className="mb-4 rounded-md bg-[#ffebe9] p-3 text-sm text-[#cf222e] border border-[#cf222e] border-opacity-30">
             {error}
           </div>
         )}
@@ -228,7 +229,10 @@ export default function SignupPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Username field with availability check */}
           <div className="space-y-2">
-            <label htmlFor="username" className="text-sm font-medium">
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-[#24292f]"
+            >
               Username
             </label>
             <div className="relative">
@@ -241,44 +245,49 @@ export default function SignupPage() {
                 placeholder="username"
                 required
                 disabled={isLoading}
-                className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 ${
+                className={`w-full rounded-md border border-[#d0d7de] bg-[#f6f8fa] px-3 py-1.5 text-sm text-[#24292f] focus:border-[#0969da] focus:outline-none focus:ring-1 focus:ring-[#0969da] ${
                   validationErrors.username
-                    ? "border-red-300 focus:border-red-400 focus:ring-red-200"
-                    : "border-gray-300 focus:border-gray-400 focus:ring-gray-200"
+                    ? "border-[#cf222e] focus:border-[#cf222e]"
+                    : ""
                 }`}
               />
               {usernameStatus === "checking" && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                  <Loader2 className="h-4 w-4 animate-spin text-[#57606a]" />
                 </div>
               )}
               {usernameStatus === "available" && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  <CheckCircle className="h-4 w-4 text-[#1a7f37]" />
                 </div>
               )}
               {usernameStatus === "unavailable" && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <XCircle className="h-4 w-4 text-red-500" />
+                  <XCircle className="h-4 w-4 text-[#cf222e]" />
                 </div>
               )}
             </div>
             {validationErrors.username && (
-              <p className="text-xs text-red-600">
+              <p className="text-xs text-[#cf222e]">
                 {validationErrors.username}
               </p>
             )}
             {usernameStatus === "available" && (
-              <p className="text-xs text-green-600">Username is available</p>
+              <p className="text-xs text-[#1a7f37]">Username is available</p>
             )}
             {usernameStatus === "unavailable" && (
-              <p className="text-xs text-red-600">Username is already taken</p>
+              <p className="text-xs text-[#cf222e]">
+                Username is already taken
+              </p>
             )}
           </div>
 
           {/* Name field */}
           <div className="space-y-2">
-            <label htmlFor="name" className="text-sm font-medium">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-[#24292f]"
+            >
               Full Name
             </label>
             <input
@@ -290,20 +299,23 @@ export default function SignupPage() {
               placeholder="John Doe"
               required
               disabled={isLoading}
-              className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 ${
+              className={`w-full rounded-md border border-[#d0d7de] bg-[#f6f8fa] px-3 py-1.5 text-sm text-[#24292f] focus:border-[#0969da] focus:outline-none focus:ring-1 focus:ring-[#0969da] ${
                 validationErrors.name
-                  ? "border-red-300 focus:border-red-400 focus:ring-red-200"
-                  : "border-gray-300 focus:border-gray-400 focus:ring-gray-200"
+                  ? "border-[#cf222e] focus:border-[#cf222e]"
+                  : ""
               }`}
             />
             {validationErrors.name && (
-              <p className="text-xs text-red-600">{validationErrors.name}</p>
+              <p className="text-xs text-[#cf222e]">{validationErrors.name}</p>
             )}
           </div>
 
           {/* Email field */}
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-[#24292f]"
+            >
               Email
             </label>
             <input
@@ -315,20 +327,23 @@ export default function SignupPage() {
               placeholder="name@example.com"
               required
               disabled={isLoading}
-              className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 ${
+              className={`w-full rounded-md border border-[#d0d7de] bg-[#f6f8fa] px-3 py-1.5 text-sm text-[#24292f] focus:border-[#0969da] focus:outline-none focus:ring-1 focus:ring-[#0969da] ${
                 validationErrors.email
-                  ? "border-red-300 focus:border-red-400 focus:ring-red-200"
-                  : "border-gray-300 focus:border-gray-400 focus:ring-gray-200"
+                  ? "border-[#cf222e] focus:border-[#cf222e]"
+                  : ""
               }`}
             />
             {validationErrors.email && (
-              <p className="text-xs text-red-600">{validationErrors.email}</p>
+              <p className="text-xs text-[#cf222e]">{validationErrors.email}</p>
             )}
           </div>
 
           {/* Password field */}
           <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-[#24292f]"
+            >
               Password
             </label>
             <div className="relative">
@@ -340,10 +355,10 @@ export default function SignupPage() {
                 onChange={handleChange}
                 required
                 disabled={isLoading}
-                className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 ${
+                className={`w-full rounded-md border border-[#d0d7de] bg-[#f6f8fa] px-3 py-1.5 text-sm text-[#24292f] focus:border-[#0969da] focus:outline-none focus:ring-1 focus:ring-[#0969da] ${
                   validationErrors.password
-                    ? "border-red-300 focus:border-red-400 focus:ring-red-200"
-                    : "border-gray-300 focus:border-gray-400 focus:ring-gray-200"
+                    ? "border-[#cf222e] focus:border-[#cf222e]"
+                    : ""
                 }`}
               />
               <button
@@ -353,14 +368,14 @@ export default function SignupPage() {
                 tabIndex={-1}
               >
                 {showPassword ? (
-                  <EyeOff className="h-4 w-4 text-gray-500" />
+                  <EyeOff className="h-4 w-4 text-[#57606a]" />
                 ) : (
-                  <Eye className="h-4 w-4 text-gray-500" />
+                  <Eye className="h-4 w-4 text-[#57606a]" />
                 )}
               </button>
             </div>
             {validationErrors.password && (
-              <p className="text-xs text-red-600">
+              <p className="text-xs text-[#cf222e]">
                 {validationErrors.password}
               </p>
             )}
@@ -368,7 +383,10 @@ export default function SignupPage() {
 
           {/* Password Confirmation field */}
           <div className="space-y-2">
-            <label htmlFor="passwordConfirm" className="text-sm font-medium">
+            <label
+              htmlFor="passwordConfirm"
+              className="block text-sm font-medium text-[#24292f]"
+            >
               Confirm Password
             </label>
             <div className="relative">
@@ -380,10 +398,10 @@ export default function SignupPage() {
                 onChange={handleChange}
                 required
                 disabled={isLoading}
-                className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 ${
+                className={`w-full rounded-md border border-[#d0d7de] bg-[#f6f8fa] px-3 py-1.5 text-sm text-[#24292f] focus:border-[#0969da] focus:outline-none focus:ring-1 focus:ring-[#0969da] ${
                   validationErrors.passwordConfirm
-                    ? "border-red-300 focus:border-red-400 focus:ring-red-200"
-                    : "border-gray-300 focus:border-gray-400 focus:ring-gray-200"
+                    ? "border-[#cf222e] focus:border-[#cf222e]"
+                    : ""
                 }`}
               />
               <button
@@ -393,22 +411,25 @@ export default function SignupPage() {
                 tabIndex={-1}
               >
                 {showPasswordConfirm ? (
-                  <EyeOff className="h-4 w-4 text-gray-500" />
+                  <EyeOff className="h-4 w-4 text-[#57606a]" />
                 ) : (
-                  <Eye className="h-4 w-4 text-gray-500" />
+                  <Eye className="h-4 w-4 text-[#57606a]" />
                 )}
               </button>
             </div>
             {validationErrors.passwordConfirm && (
-              <p className="text-xs text-red-600">
+              <p className="text-xs text-[#cf222e]">
                 {validationErrors.passwordConfirm}
               </p>
             )}
           </div>
 
-          {/* Photo upload field - improved design */}
+          {/* Photo upload field - GitHub style */}
           <div className="space-y-3">
-            <label htmlFor="photo" className="text-sm font-medium">
+            <label
+              htmlFor="photo"
+              className="block text-sm font-medium text-[#24292f]"
+            >
               Profile Photo (Optional)
             </label>
 
@@ -430,7 +451,7 @@ export default function SignupPage() {
                         setPhoto(null);
                         setPhotoPreview(null);
                       }}
-                      className="absolute -right-2 -top-2 rounded-full bg-white p-1 text-red-500 shadow-md hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-200"
+                      className="absolute -right-2 -top-2 rounded-full bg-white p-1 text-[#cf222e] shadow-md hover:bg-[#f6f8fa] focus:outline-none focus:ring-2 focus:ring-[#cf222e]"
                     >
                       <XCircle className="h-5 w-5" />
                     </button>
@@ -438,12 +459,12 @@ export default function SignupPage() {
                 ) : null}
               </div>
 
-              {/* Upload area */}
+              {/* Upload area - GitHub style */}
               <div
-                className={`relative flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors ${
+                className={`relative flex w-full cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed p-6 transition-colors ${
                   photoPreview
-                    ? "border-gray-200 bg-gray-50"
-                    : "border-blue-200 bg-blue-50 hover:bg-blue-100"
+                    ? "border-[#d0d7de] bg-[#f6f8fa]"
+                    : "border-[#d0d7de] bg-white hover:border-[#0969da] hover:bg-[#f6f8fa]"
                 }`}
                 onDragOver={(e) => {
                   e.preventDefault();
@@ -479,18 +500,18 @@ export default function SignupPage() {
 
                 {!photoPreview ? (
                   <>
-                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-500">
+                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#f6f8fa] text-[#0969da]">
                       <Upload className="h-6 w-6" />
                     </div>
-                    <p className="mb-1 text-sm font-medium text-blue-500">
+                    <p className="mb-1 text-sm font-medium text-[#0969da]">
                       {photo ? photo.name : "Click to upload or drag and drop"}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-[#57606a]">
                       SVG, PNG, JPG or GIF (Max. 2MB)
                     </p>
                   </>
                 ) : (
-                  <p className="text-sm font-medium text-gray-600">
+                  <p className="text-sm font-medium text-[#57606a]">
                     Click or drag to change photo
                   </p>
                 )}
@@ -498,7 +519,7 @@ export default function SignupPage() {
             </div>
           </div>
 
-          {/* Submit button */}
+          {/* Submit button - GitHub style */}
           <button
             type="submit"
             disabled={
@@ -506,7 +527,7 @@ export default function SignupPage() {
               usernameStatus === "checking" ||
               usernameStatus === "unavailable"
             }
-            className={`w-full rounded-md bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+            className={`w-full rounded-md bg-[#2da44e] px-4 py-2 text-white transition-colors hover:bg-[#2c974b] focus:outline-none focus:ring-2 focus:ring-[#2da44e] focus:ring-offset-2 focus:ring-offset-white ${
               isLoading ||
               usernameStatus === "checking" ||
               usernameStatus === "unavailable"
@@ -525,11 +546,11 @@ export default function SignupPage() {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm">
+        <div className="mt-6 text-center text-sm text-[#57606a]">
           Already have an account?{" "}
           <Link
             href="/login"
-            className="font-medium text-blue-600 hover:underline"
+            className="font-medium text-[#0969da] hover:underline"
           >
             Log in
           </Link>

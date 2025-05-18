@@ -53,59 +53,56 @@ export default function CodeSmellPieChart({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   return (
-    <Card className="dark:bg-[#0f162b] shadow-md w-[400px] md:w-full">
-      <CardHeader>
-        <CardTitle className="text-xl font-bold">
+    <div className="border border-[#d0d7de] rounded-md overflow-hidden">
+      <div className="bg-[#f6f8fa] border-b border-[#d0d7de] px-4 py-3">
+        <h3 className="text-sm font-semibold text-[#24292f]">
           Code Smell Distribution
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="h-[400px]  md:flex-1">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={codeSmellTypes}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={isMobile ? 100 : 130}
-                  innerRadius={isMobile ? 60 : 70}
-                  dataKey="value"
-                  cornerRadius={15}
-                  nameKey="category"
-                  label={({ category, value, percent }) =>
-                    isMobile
-                      ? `${(percent * 100).toFixed(0)}%`
-                      : `${category} (${value})    ${(percent * 100).toFixed(
-                          0
-                        )}%`
-                  }
-                  labelLine={!isMobile} // Remove label line in mobile
-                >
-                  {codeSmellTypes.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip content={<CustomTooltip />} />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="flex flex-col justify-center gap-2 lg:w-48">
-            {codeSmellTypes.map((entry, index) => (
-              <div
-                key={`legend-${index}`}
-                className="flex items-center gap-2 text-sm font-medium"
+        </h3>
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="h-[400px]  md:flex-1">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={codeSmellTypes}
+                cx="50%"
+                cy="50%"
+                outerRadius={isMobile ? 100 : 130}
+                innerRadius={isMobile ? 60 : 70}
+                dataKey="value"
+                cornerRadius={15}
+                nameKey="category"
+                label={({ category, value, percent }) =>
+                  isMobile
+                    ? `${(percent * 100).toFixed(0)}%`
+                    : `${category} (${value})    ${(percent * 100).toFixed(0)}%`
+                }
+                labelLine={!isMobile} // Remove label line in mobile
               >
-                <div
-                  className="h-3 w-3 rounded-full"
-                  style={{ backgroundColor: entry.color }}
-                ></div>
-                <span>{entry.category}</span>
-              </div>
-            ))}
-          </div>
+                {codeSmellTypes.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip content={<CustomTooltip />} />
+            </PieChart>
+          </ResponsiveContainer>
         </div>
-      </CardContent>
-    </Card>
+        <div className="flex flex-col justify-center gap-2 lg:w-48">
+          {codeSmellTypes.map((entry, index) => (
+            <div
+              key={`legend-${index}`}
+              className="flex items-center gap-2 text-sm font-medium"
+            >
+              <div
+                className="h-3 w-3 rounded-full"
+                style={{ backgroundColor: entry.color }}
+              ></div>
+              <span>{entry.category}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

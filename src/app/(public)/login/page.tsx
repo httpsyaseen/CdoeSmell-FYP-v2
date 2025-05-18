@@ -38,18 +38,21 @@ export default function LoginPage() {
     }
   };
   return (
-    <div className="flex min-h-screen items-center justify-center  bg-gradient-to-t from-blue-100 from-50% to-gray-50">
-      <div className="w-full max-w-md rounded-lg border bg-white p-8 shadow-sm">
+    <div className="flex min-h-screen items-center justify-center bg-[#f6f8fa]">
+      <div className="w-full max-w-md rounded-md border border-[#d0d7de] bg-white p-6 shadow-sm">
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold">Log In Account</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-[#24292f]">Log In Account</h1>
+          <p className="text-sm text-[#57606a]">
             Enter your credentials to access your account
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">
+            <label
+              htmlFor="email"
+              className="text-sm font-medium text-[#24292f]"
+            >
               Email
             </label>
             <input
@@ -60,18 +63,21 @@ export default function LoginPage() {
               placeholder="name@example.com"
               required
               disabled={isLoading}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-[#2463ea] focus:outline-none focus:ring-2 focus:ring-[#2463ea]"
+              className="w-full rounded-md border border-[#d0d7de] bg-[#f6f8fa] px-3 py-1.5 text-sm text-[#24292f] focus:border-[#0969da] focus:outline-none focus:ring-1 focus:ring-[#0969da]"
             />
           </div>
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label htmlFor="password" className="text-sm font-medium">
+              <label
+                htmlFor="password"
+                className="text-sm font-medium text-[#24292f]"
+              >
                 Password
               </label>
               <Link
                 href="/forgot-password"
-                className="text-xs text-semibold text-primary hover:underline"
+                className="text-xs font-medium text-[#0969da] hover:underline"
               >
                 Forgot Password?
               </Link>
@@ -84,7 +90,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={isLoading}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-[#2463ea] focus:outline-none focus:ring-2 focus:ring-[#2463ea]"
+                className="w-full rounded-md border border-[#d0d7de] bg-[#f6f8fa] px-3 py-1.5 text-sm text-[#24292f] focus:border-[#0969da] focus:outline-none focus:ring-1 focus:ring-[#0969da]"
               />
               <button
                 type="button"
@@ -93,9 +99,9 @@ export default function LoginPage() {
                 tabIndex={-1}
               >
                 {showPassword ? (
-                  <EyeOff className="h-4 w-4 text-gray-500" />
+                  <EyeOff className="h-4 w-4 text-[#57606a]" />
                 ) : (
-                  <Eye className="h-4 w-4 text-gray-500" />
+                  <Eye className="h-4 w-4 text-[#57606a]" />
                 )}
               </button>
             </div>
@@ -104,7 +110,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full rounded-md bg-primary px-4 py-2 cursor-pointer text-white transition-colors hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+            className={`w-full rounded-md bg-[#2da44e] px-4 py-2 text-white transition-colors hover:bg-[#2c974b] focus:outline-none focus:ring-2 focus:ring-[#2da44e] focus:ring-offset-2 ${
               isLoading ? "cursor-not-allowed opacity-70" : ""
             }`}
           >
@@ -119,11 +125,11 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm">
+        <div className="mt-6 text-center text-sm text-[#24292f]">
           Not a Member yet?{" "}
           <Link
             href="/signup"
-            className="font-medium text-primary cursor-pointer text-base"
+            className="font-medium text-[#0969da] cursor-pointer text-base hover:underline"
           >
             Sign up
           </Link>

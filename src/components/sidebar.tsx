@@ -35,19 +35,26 @@ export function AppSidebar() {
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [isActive, setIsActive] = React.useState(window.location.href);
+  const [isActive, setIsActive] = React.useState("");
 
   React.useEffect(() => {
-    setIsActive(window.location.href);
+    const handleRouteChange = () => {
+      setIsActive(window.location.pathname);
+    };
+
+    handleRouteChange(); // Set initial state
+    window.addEventListener("popstate", handleRouteChange);
+
+    return () => {
+      window.removeEventListener("popstate", handleRouteChange);
+    };
   }, []);
 
   React.useEffect(() => {
     const fetchProjects = async () => {
       setIsLoading(true);
       try {
-        const response = await api.get(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/project/recent-projects`
-        );
+        const response = await api.get(`/project/recent-projects`);
         setProjects(response.data.projects);
         setError(null);
       } catch (err) {
@@ -66,10 +73,10 @@ export function AppSidebar() {
   );
 
   return (
-    <Sidebar className="border-r mt-16 bg-white">
+    <Sidebar className="mt-16 border-r border-[#d0d7de] bg-[#f6f8fa]">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-xs font-medium text-muted-foreground tracking-wider">
+          <SidebarGroupLabel className="px-3 text-xs font-medium text-[#57606a] tracking-wider">
             OVERVIEW
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -77,11 +84,15 @@ export function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  className={`${isActive === "/dashboard" && "bg-[#edeef1]"}`}
+                  className={`rounded-md px-3 ${
+                    isActive === "/dashboard"
+                      ? "bg-[#eaeef2] font-medium text-[#24292f]"
+                      : "hover:bg-[#eaeef2]"
+                  }`}
                 >
                   <a
                     href="/dashboard"
-                    className="flex items-center gap-3 text-sm text-foreground hover:text-primary"
+                    className="flex items-center gap-2 text-sm text-[#24292f]"
                   >
                     <HomeIcon className="h-4 w-4" />
                     <span>Dashboard</span>
@@ -91,11 +102,15 @@ export function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  className={`${isActive === "/dashboard" && "bg-[#edeef1]"}`}
+                  className={`rounded-md px-3 ${
+                    isActive === "/upload"
+                      ? "bg-[#eaeef2] font-medium text-[#24292f]"
+                      : "hover:bg-[#eaeef2]"
+                  }`}
                 >
                   <a
                     href="/upload"
-                    className="flex items-center gap-3 text-sm text-foreground hover:text-primary"
+                    className="flex items-center gap-2 text-sm text-[#24292f]"
                   >
                     <UploadIcon className="h-4 w-4" />
                     <span>Upload New Project</span>
@@ -103,10 +118,17 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton
+                  asChild
+                  className={`rounded-md px-3 ${
+                    isActive === "/projects"
+                      ? "bg-[#eaeef2] font-medium text-[#24292f]"
+                      : "hover:bg-[#eaeef2]"
+                  }`}
+                >
                   <a
                     href="/projects"
-                    className="flex items-center gap-3 text-sm text-foreground hover:text-primary"
+                    className="flex items-center gap-2 text-sm text-[#24292f]"
                   >
                     <FileIcon className="h-4 w-4" />
                     <span>Projects</span>
@@ -118,15 +140,15 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-xs font-medium text-muted-foreground tracking-wider">
+          <SidebarGroupLabel className="px-3 text-xs font-medium text-[#57606a] tracking-wider">
             RECENT PROJECTS
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <div className="relative mb-2">
-              <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <div className="relative mb-2 px-3">
+              <SearchIcon className="absolute left-6 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#57606a]" />
               <Input
                 placeholder="Search project"
-                className="pl-9 h-8 bg-background text-sm"
+                className="h-7 rounded-md border-[#d0d7de] bg-[#f6f8fa] pl-8 text-sm focus-visible:border-[#0969da] focus-visible:ring-1 focus-visible:ring-[#0969da]"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -137,32 +159,35 @@ export function AppSidebar() {
                   .fill(0)
                   .map((_, index) => (
                     <SidebarMenuItem key={index}>
-                      <div className="flex items-center justify-between py-1.5 px-2">
-                        <div className="flex items-center gap-3">
-                          <div className="h-4 w-4 rounded-md bg-muted animate-pulse" />
-                          <div className="h-4 w-32 rounded-md bg-muted animate-pulse" />
+                      <div className="flex items-center justify-between py-1.5 px-3">
+                        <div className="flex items-center gap-2">
+                          <div className="h-4 w-4 rounded-md bg-[#d0d7de] animate-pulse" />
+                          <div className="h-4 w-32 rounded-md bg-[#d0d7de] animate-pulse" />
                         </div>
-                        <div className="h-4 w-16 rounded-md bg-muted animate-pulse" />
+                        <div className="h-4 w-16 rounded-md bg-[#d0d7de] animate-pulse" />
                       </div>
                     </SidebarMenuItem>
                   ))
               ) : error ? (
-                <div className="text-sm text-muted-foreground p-2">{error}</div>
+                <div className="px-3 py-2 text-sm text-[#57606a]">{error}</div>
               ) : (
                 filteredProjects.map((project) => (
                   <SidebarMenuItem key={project._id}>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton
+                      asChild
+                      className="rounded-md px-3 hover:bg-[#eaeef2]"
+                    >
                       <a
                         href={`/report/${project._id}`}
-                        className="flex items-center justify-between text-sm text-foreground hover:text-primary"
+                        className="flex items-center justify-between text-sm text-[#24292f]"
                       >
-                        <div className="flex items-center gap-3">
-                          <FileIcon className="h-4 w-4 text-muted-foreground" />
+                        <div className="flex items-center gap-2">
+                          <FileIcon className="h-4 w-4 text-[#57606a]" />
                           <span className="truncate max-w-[160px]">
                             {project.title}
                           </span>
                         </div>
-                        <span className="text-xs text-muted-foreground shrink-0">
+                        <span className="text-xs text-[#57606a] shrink-0">
                           {formatDistanceToNow(new Date(project.createdAt), {
                             addSuffix: true,
                           })}
@@ -176,9 +201,9 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="border-t p-2">
-        <Avatar className="h-8 w-8">
-          <AvatarFallback className="bg-primary text-primary-foreground">
+      <SidebarFooter className="border-t border-[#d0d7de] p-3">
+        <Avatar className="h-8 w-8 border border-[#d0d7de]">
+          <AvatarFallback className="bg-[#eaeef2] text-[#24292f]">
             N
           </AvatarFallback>
         </Avatar>
