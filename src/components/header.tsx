@@ -7,7 +7,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { HiUser } from "react-icons/hi2";
+import { HiUser, HiOutlineUser } from "react-icons/hi2";
+import { LogOutIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -16,7 +17,7 @@ export default function Header() {
   const router = useRouter();
 
   return (
-    <nav className="bg-[#f6f9fb] w-full sticky top-0 z-[99] flex px-10 backdrop-blur-2xl justify-between h-16  border-b items-center">
+    <nav className="bg-[#f6f9fb] w-full sticky top-0 z-[99] flex px-10 backdrop-blur-2xl justify-between h-16 border-b items-center">
       <div className="flex gap-2 items-center">
         <Image
           src={"/logo.png"}
@@ -32,10 +33,10 @@ export default function Header() {
         {isAuthenticated ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center cursor-pointer">
                 <span className="text-lg font-semibold">{user?.name}</span>
                 {user?.photo ? (
-                  <div className="relative h-9 w-9 rounded-full overflow-hidden cursor-pointer bg-[#04609E] dark:bg-gray-700 flex items-center justify-center">
+                  <div className="relative h-9 w-9 rounded-full overflow-hidden bg-[#04609E] dark:bg-gray-700 flex items-center justify-center">
                     <Image
                       src={user.photo}
                       alt="User profile"
@@ -45,19 +46,30 @@ export default function Header() {
                     />
                   </div>
                 ) : (
-                  <div className="bg-transparent hover:bg-transparent p-0 hidden md:flex items-center gap-2 cursor-pointer">
-                    <span className="flex items-center justify-center size-9 bg-[#04609E] dark:bg-gray-700 rounded-full overflow-hidden">
-                      <HiUser size={24} color="white" />
-                    </span>
+                  <div className="flex items-center justify-center size-9 bg-[#04609E] dark:bg-gray-700 rounded-full overflow-hidden">
+                    <HiUser size={24} color="white" />
                   </div>
                 )}
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => router.push("/profile")}>
-                Profile
+            <DropdownMenuContent className="w-40 mt-2 rounded-md shadow-md p-1 bg-white dark:bg-gray-900">
+              <DropdownMenuItem
+                onClick={() => router.push("/profile")}
+                className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md cursor-pointer"
+              >
+                <HiOutlineUser
+                  className="text-gray-600 dark:text-gray-300"
+                  size={18}
+                />
+                <span>Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={logout}
+                className="flex items-center gap-2 px-3 py-2 hover:bg-red-50 dark:hover:bg-red-900 rounded-md cursor-pointer"
+              >
+                <LogOutIcon className="text-red-500" size={18} />
+                <span className="text-red-500">Logout</span>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
@@ -65,9 +77,6 @@ export default function Header() {
             <span className="flex items-center justify-center size-9 bg-[#0366d6] dark:bg-gray-700 rounded-full overflow-hidden">
               <HiUser size={24} color="white" />
             </span>
-            {/* <span className="text-black dark:text-white hidden xl:flex ">
-              <HiArrowRight size={24} />
-            </span> */}
             <span className="sr-only">Login/Signup</span>
           </div>
         )}
