@@ -1,7 +1,12 @@
 "use client";
 
 import type React from "react";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
@@ -42,9 +47,7 @@ export default function GitHubReportPage() {
     const fetchProject = async () => {
       setIsLoading(true);
       try {
-        const { data } = await api.get(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/project/get-project/${id}`
-        );
+        const { data } = await api.get(`/project/get-project/${id}`);
         setProject(data.project);
       } catch (error) {
         console.error("Error fetching project:", error);
@@ -98,6 +101,42 @@ export default function GitHubReportPage() {
     router.push(`/code-editor/${id}`);
   };
 
+  const downloadJson = () => {
+    const smells = project?.latestVersion?.report?.smells;
+    const dataStr = JSON.stringify(smells, null, 2); // pretty print
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "smells-report.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadCsv = () => {
+    const smells = project?.latestVersion?.report?.smells;
+    if (!smells || smells.length === 0) return;
+
+    const keys = Object.keys(smells[0]); // assume all objects have the same keys
+    const csvRows = [
+      keys.join(","), // header row
+      ...smells.map((row: any) =>
+        keys
+          .map((key) => `"${(row[key] ?? "").toString().replace(/"/g, '""')}"`)
+          .join(",")
+      ),
+    ];
+
+    const csvContent = csvRows.join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "smells-report.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-white">
@@ -123,14 +162,22 @@ export default function GitHubReportPage() {
             </Badge>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 text-xs font-medium text-[#24292f] border-[#d0d7de] bg-[#f6f8fa] hover:bg-[#f3f4f6]"
-            >
-              <Download className="mr-1.5 h-3.5 w-3.5" />
-              Download Report
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs font-medium text-[#24292f] border-[#d0d7de] bg-[#f6f8fa] hover:bg-[#f3f4f6]"
+                >
+                  <Download className="mr-1.5 h-3.5 w-3.5" />
+                  Download Report
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-40">
+                <DropdownMenuItem onClick={downloadJson}>JSON</DropdownMenuItem>
+                <DropdownMenuItem onClick={downloadCsv}>CSV</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             <Dialog>
               <DialogTrigger asChild>
