@@ -110,6 +110,8 @@ export default function UploadProjectPage() {
       setSearchResults((prev) =>
         prev.filter((result) => result.id !== user.id)
       );
+
+      setSearchQuery("")
     }
   };
 
